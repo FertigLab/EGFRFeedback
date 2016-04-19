@@ -1,0 +1,100 @@
+load("/Users/ejfertig/Dropbox/K25_Fertig/Aim3Analysis/cache/CoGAPS6.RData")
+ls()
+CoGAPS6
+q()
+load("/Users/ejfertig/Dropbox/K25_Fertig/Aim3Analysis/cache/CoGAPS2.RData")
+matplot(t(CoGAPS2$Pmean))
+matplot(t(CoGAPS3$Pmean))
+load("/Users/ejfertig/Dropbox/K25_Fertig/Aim3Analysis/cache/CoGAPS3.RData")
+matplot(t(CoGAPS3$Pmean))
+load("/Users/ejfertig/Dropbox/K25_Fertig/Aim3Analysis/cache/CoGAPS4.RData")
+matplot(t(CoGAPS4$Pmean))
+graphics.off()
+q()
+load("/Users/ejfertig/Dropbox/K25_Fertig/Aim3Analysis/cache/CoGAPS.EGAbvSiByLine.01SD.2.RData")
+ls()
+CoGAPS.EGAbvSiByLine.01SD.2$Amean
+CoGAPS.EGAbvSiByLine.01SD.2$Pmean
+matplot(t(CoGAPS.EGAbvSiByLine.01SD.2$Pmean))
+graphics.off()
+matplot(t(CoGAPS.EGAbvSiByLine.01SD.2$Pmean))
+load('CoGAPS.EGAbvSiByLine.2.RData')
+dev.new()
+matplot(t(CoGAPS.EGAbvSiByLine.2$Pmean))
+load('CoGAPS01SD2.RData')
+matplot(t(CoGAPS01SD2$Pmean))
+graphics.off()
+matplot(t(CoGAPS01SD2$Pmean))
+load('CoGAPS2.RData')
+dev.new()
+matplot(t(CoGAPS01SD2$Pmean))
+matplot(t(CoGAPS2$Pmean))
+graphics.off()
+load("/Users/ejfertig/Dropbox/K25_Fertig/Aim3Analysis/cache/CoGAPS.EGAbvBaselineTreatmentBiDirectionalPattern.01SD.3.RData")
+matplot(CoGAPS.EGAbvBaselineTreatmentBiDirectionalPattern.01SD.3$Pmean)
+matplot(t(CoGAPS.EGAbvBaselineTreatmentBiDirectionalPattern.01SD.3$Pmean))
+graphics.off()
+load("/Users/ejfertig/Dropbox/K25_Fertig/Aim3Analysis/cache/CoGAPS.EGAbvBaselinePattern.3.RData")
+load("/Users/ejfertig/Dropbox/K25_Fertig/Aim3Analysis/cache/CoGAPS_SDFIVE_2.RData")
+matplot(t(CoGAPS_SDFIVE_2$Pmean))
+q()
+load("/Users/ejfertig/Dropbox/K25_Fertig/Aim3Analysis/cache/DrugSens.RData")
+load("/Users/ejfertig/Dropbox/K25_Fertig/Aim3Analysis/cache/HaCaT.TFGene.TrtCor.RData")
+ls()
+HaCaT.TFGene.TrtCor['EGFR',]
+load("/Users/ejfertig/Dropbox/SpliceVariantCalifano/SashimiPlots/ForSashimi.RDA")
+ls()
+junctpval
+load("/Users/ejfertig/Library/Containers/com.apple.mail/Data/Library/Mail Downloads/1765B6B9-29A8-4B4F-B3EC-7318732D7FA8/EGFRfriends.Rda")
+rm(list=ls9))
+rm(list=ls())
+load("/Users/ejfertig/Library/Containers/com.apple.mail/Data/Library/Mail Downloads/1765B6B9-29A8-4B4F-B3EC-7318732D7FA8/EGFRfriends.Rda")
+ls()
+EGFR.friends
+EGFR.friends[1:10]
+EGFR.friends[1:100]
+ERBB2.friends
+ERBB2.friends[1:10]
+ERBB3.friends[1:10]
+cbind(EGFR.friends,ERBB2.friends,ERBB3.friends)
+cbind(EGFR.friends,ERBB2.friends,ERBB3.friends)[1:10,]
+intersect(EGFR.friends[1:100],ERBB2.friends[1:100])
+intersect(EGFR.friends[1:100],ERBB3.friends[1:100])
+load("/Users/ejfertig/Library/Containers/com.apple.mail/Data/Library/Mail Downloads/24F50ABA-FD6E-4760-902B-2168A3E16D60/3genes-6ways-friends.Rda")
+rm(list=ls())
+load("/Users/ejfertig/Library/Containers/com.apple.mail/Data/Library/Mail Downloads/24F50ABA-FD6E-4760-902B-2168A3E16D60/3genes-6ways-friends.Rda")
+ls()
+EGFR.Pearson.Diff.friends
+EGFR.Pearson.Diff.friends[1:100]
+EGFR.Pearson.Mean.friends[1:100]
+ERBB2.Pearson.Diff.friends[1:100]
+intersect(ERBB2.Pearson.Diff.friends[1:100],EGFR.Pearson.Diff.friends[1:100])
+intersect(ERBB2.Pearson.mean.friends[1:100],EGFR.Pearson.mean.friends[1:100])
+intersect(ERBB2.Pearson.Mean.friends[1:100],EGFR.Pearson.Mean.friends[1:100])
+intersect(ERBB3.Pearson.Diff.friends[1:100],EGFR.Pearson.Diff.friends[1:100])
+intersect(ERBB3.Pearson.Diff.friends[1:100],ERBB2.Pearson.Diff.friends[1:100])
+ERBB2.Pearson.Diff.friends
+load('~/Documents/Data/TRANSFAC/TRANSFAC_Genes_2014.Rda')
+ls()
+EGFR.bicor.Diff.friends[1:100]
+ERBB2.bicor.Diff.friends[1:100]
+TF2Gene
+grep('AP',names(TF2Gene))
+grep('AP',names(TF2Gene),value=T)
+TF2Gene[["AP-2alpha"]]
+TF2Gene <- sapply(TF2Gene,intersect,EGFR.bicor.Diff.friends)
+TF2Gene[["AP-2alpha"]]
+EGFR.bicor.Diff.friends
+EGFR.bicor.Diff.friends %in% TF2Gene[["AP-2alpha"]]
+which(EGFR.bicor.Diff.friends %in% TF2Gene[["AP-2alpha"]]
+)
+which(EGFR.bicor.Diff.friends %in% TF2Gene[["AP-2alpha"]])
+which(ERBB2.bicor.Diff.friends %in% TF2Gene[["AP-2alpha"]])
+which(ERBB2.Pearson.Diff.friends %in% TF2Gene[["AP-2alpha"]])
+which(EGFR.Pearson.Diff.friends %in% TF2Gene[["AP-2alpha"]])
+which(EGFR.Pearson.Mean.friends %in% TF2Gene[["AP-2alpha"]])
+which(ERBB2.Pearson.Mean.friends %in% TF2Gene[["AP-2alpha"]])
+which(ERBB2.bicor.Mean.friends %in% TF2Gene[["AP-2alpha"]])
+which(ERBB2.Spearman.Mean.friends %in% TF2Gene[["AP-2alpha"]])
+which(EGFR.Spearman.Mean.friends %in% TF2Gene[["AP-2alpha"]])
+which(EGFR.Spearman.Mean.friends %in% TF2Gene[["AP-2gamma"]])
