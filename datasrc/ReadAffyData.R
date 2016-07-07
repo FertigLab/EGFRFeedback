@@ -4,10 +4,6 @@
 ### libraries
 library('affy')
 
-### Premalignancies
-Premalignancies.CEL <- ReadAffy(celfile.path='data/JPer050313/JPer050313 raw data/')
-save(Premalignancies.CEL,file='data/Premalignancies.CEL.Rda')
-
 ### HaCaT
 HaCaT.CEL.BATCH1 <- ReadAffy(celfile.path='data/JPer050313-2/JPer050313-2 raw data/')
 save(HaCaT.CEL.BATCH1,file='data/HaCaT.CEL.BATCH1.Rda')
