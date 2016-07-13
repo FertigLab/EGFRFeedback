@@ -3,7 +3,7 @@ cache_loading: TRUE
 munging: FALSE
 logging: TRUE
 load_libraries: TRUE
-libraries: gplots, frma, affy, hgu133plus2.db, limma, simpleaffy, ClassDiscovery, Hmisc, CoGAPS, sva
+libraries: gplots, frma, affy, hgu133plus2.db, limma, simpleaffy, ClassDiscovery, Hmisc, CoGAPS, sva, gridExtra
 as_factors: FALSE
 data_tables: FALSE
 recursive_loading: FALSE
