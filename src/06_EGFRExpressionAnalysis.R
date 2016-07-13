@@ -55,9 +55,30 @@ EGFRExprs <- matrix(NA, nrow=4, ncol=6,
                                   c('Control NA', 'Cetuximab NA', 
                                     'Gefitinib NA', 'Afatinib NA',
                                     'NA Scramble', 'NA EGFR')))
-EGFRMin <- EGFRMax <- EGFRExprs
+EGFRMin <- EGFRMax <- EGFRP <- EGFRExprs
 
 for (c in row.names(EGFRExprs)) {
+  
+  trtSamp <- row.names(HaCaT.sampleAnnot)[
+    paste(HaCaT.sampleAnnot$Treatment,HaCaT.sampleAnnot$siRNA) %in% 
+      c('Control NA', 'Cetuximab NA', 'Afatinib NA', 'Gefitinib NA', 'NA Scramble', 'NA EGFR')]
+  trtSamp <- trtSamp[HaCaT.sampleAnnot[trtSamp,'CellLine']==c]
+  trtSamp <- intersect(trtSamp, colnames(HaCaT.Gene.FRMA.pSVA))
+  
+  Treatment <- paste0(HaCaT.sampleAnnot[trtSamp,'Treatment'],
+                     HaCaT.sampleAnnot[trtSamp,'siRNA'])
+  
+  trtModel <- model.matrix(~0+ Treatment)
+  colnames(trtModel) <- gsub('-','',colnames(trtModel))
+  trtLm <- lmFit(HaCaT.Gene.FRMA.pSVA[,trtSamp],trtModel)
+  trtCon <- eBayes(contrasts.fit(trtLm,
+                                 makeContrasts(contrasts=c("TreatmentCetuximabNA-TreatmentControlNA",
+                                                           "TreatmentGefitinibNA-TreatmentControlNA",
+                                                           "TreatmentAfatinibNA-TreatmentControlNA",
+                                                           "TreatmentNAEGFR - TreatmentNAScramble"),
+                                               levels=trtModel)))
+  
+  
   for (e in colnames(EGFRExprs)) {
     samp <- colnames(HaCaT.Gene.FRMA.pSVA)
     samp <- samp[HaCaT.sampleAnnot[samp,'CellLine']==c]
@@ -65,9 +86,20 @@ for (c in row.names(EGFRExprs)) {
                        HaCaT.sampleAnnot[samp,'siRNA'])==e]
     EGFRExprs[c,e] <- mean(HaCaT.Gene.FRMA.pSVA[g,samp])
     EGFRMin[c,e] <- min(HaCaT.Gene.FRMA.pSVA[g,samp])
-    EGFRMax[c,e] <- max(HaCaT.Gene.FRMA.pSVA[g,samp])    
+    EGFRMax[c,e] <- max(HaCaT.Gene.FRMA.pSVA[g,samp])
+    
+    if (e!= 'Control NA' & e!= 'NA Scramble') {
+      EGFRP[c,e] <- trtCon['EGFR',grep(sub(" ","",e),colnames(trtCon),value=T)]$p.value
+    }
   }
 }
+
+# univariate p-values by cell line and treatment relative to control
+EGFRP <- EGFRP[,!apply(is.na(EGFRP),2,any)]
+pdf('graphs/EGFRPValues.pdf')
+grid.table(signif(EGFRP,2))
+dev.off()
+
 
 EGFRStats <- rep(NA, 4)
 names(EGFRStats) <- c('Cetuximab NA vs Control NA', 
