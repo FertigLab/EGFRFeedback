@@ -89,11 +89,18 @@ load('data/TRANSFAC_Genes_2014.Rda')
 AP2Up <- read.table('reports/LINCS2000/AP2Up.grp',header=T)
 AP2Down <- read.table('reports/LINCS2000/AP2Down.grp',header=T)
 
-delEGFRHNSCC <- HNSCC.Gene['EGFR',paste0(c(HPVNeg,HPVPos),'_CTX24h')] - 
-  HNSCC.Gene['EGFR',c(HPVNeg,HPVPos)]
+#delEGFRHNSCC <- HNSCC.Gene['EGFR',paste0(c(HPVNeg,HPVPos),'_CTX24h')] - 
+#  HNSCC.Gene['EGFR',c(HPVNeg,HPVPos)]
 
-delAllHNSCC <- HNSCC.Gene[,paste0(c(HPVNeg,HPVPos),'_CTX24h')] - 
-  HNSCC.Gene[,c(HPVNeg,HPVPos)]
+#delAllHNSCC <- HNSCC.Gene[,paste0(c(HPVNeg,HPVPos),'_CTX24h')] - 
+#  HNSCC.Gene[,c(HPVNeg,HPVPos)]
+
+## HPV-negative
+delEGFRHNSCC <- HNSCC.Gene['EGFR',paste0(c(HPVNeg),'_CTX24h')] - 
+  HNSCC.Gene['EGFR',c(HPVNeg)]
+
+delAllHNSCC <- HNSCC.Gene[,paste0(c(HPVNeg),'_CTX24h')] - 
+  HNSCC.Gene[,c(HPVNeg)]
 
 delAllHNSCC <- delAllHNSCC[setdiff(row.names(delAllHNSCC),'EGFR'),]
 
@@ -110,6 +117,100 @@ AP2StatHNSCCDown <- geneSetTest(statistics = delFit$t[,2],
                                 alternative='less')
 
 
+pdf('graphs/HNSCCCellLinesEnrichment.pdf')
+par(mfrow=c(2,1))
+plot(sort(delFit$t[,2]),type='l',ylab='t EGFR association',ylim=c(-10,10))
+  
+for (p in setdiff(AP2Up[,1],'EGFR')) {
+  points(x=which(names(sort(delFit$t[,2]))  ==p),
+         y=delFit$t[p,2],
+         pch=19,col='red')
+  text(x=which(names(sort(delFit$t[,2]))  ==p),
+       y=delFit$t[p,2]+0.5,
+       labels=p,col='red',srt = 90,pos=4,offset=0)
+}
+  
+for (p in setdiff(AP2Down[,1],'EGFR')) {
+  points(x=which(names(sort(delFit$t[,2]))  ==p),
+         y=delFit$t[p,2],
+         pch=19,col='blue')
+  text(x=which(names(sort(delFit$t[,2]))  ==p),
+       y=delFit$t[p,2]-0.5,
+       labels=p,col='blue',srt = 90,pos=2,offset=0)
+}
+
+title(sprintf('HPV-negative Up %0.2f, Down %0.2f',
+              AP2StatHNSCCUp,AP2StatHNSCCDown))
+  
+## HPV-positive
+
+delEGFRHNSCC <- HNSCC.Gene['EGFR',paste0(c(HPVPos),'_CTX24h')] - 
+  HNSCC.Gene['EGFR',c(HPVPos)]
+
+delAllHNSCC <- HNSCC.Gene[,paste0(c(HPVPos),'_CTX24h')] - 
+  HNSCC.Gene[,c(HPVPos)]
+
+delAllHNSCC <- delAllHNSCC[setdiff(row.names(delAllHNSCC),'EGFR'),]
+
+mm <- model.matrix(~delEGFRHNSCC)
+delFit <- eBayes(lmFit(delAllHNSCC[,names(delEGFRHNSCC)],mm))
+
+AP2StatHNSCCUp <- geneSetTest(statistics = delFit$t[,2],
+                              index=intersect(AP2Up[,1],
+                                              row.names(delAllHNSCC)),
+                              alternative='greater')
+AP2StatHNSCCDown <- geneSetTest(statistics = delFit$t[,2],
+                                index=intersect(AP2Down[,1],
+                                                row.names(delAllHNSCC)),
+                                alternative='less')
+
+
+
+plot(sort(delFit$t[,2]),type='l',ylab='t EGFR association',ylim=c(-10,10))
+
+for (p in setdiff(AP2Up[,1],'EGFR')) {
+  points(x=which(names(sort(delFit$t[,2]))  ==p),
+         y=delFit$t[p,2],
+         pch=19,col='red')
+  text(x=which(names(sort(delFit$t[,2]))  ==p),
+       y=delFit$t[p,2]+0.5,
+       labels=p,col='red',srt = 90,pos=4,offset=0)
+}
+
+for (p in setdiff(AP2Down[,1],'EGFR')) {
+  points(x=which(names(sort(delFit$t[,2]))  ==p),
+         y=delFit$t[p,2],
+         pch=19,col='blue')
+  text(x=which(names(sort(delFit$t[,2]))  ==p),
+       y=delFit$t[p,2]-0.5,
+       labels=p,col='blue',srt = 90,pos=2,offset=0)
+}
+
+title(sprintf('HPV-positive Up %0.2f, Down %0.2f',
+              AP2StatHNSCCUp,AP2StatHNSCCDown))
+dev.off()
+
+
+### heatmap
+delEGFRHNSCC <- HNSCC.Gene['EGFR',paste0(c(HPVNeg,HPVPos),'_CTX24h')] - 
+  HNSCC.Gene['EGFR',c(HPVNeg,HPVPos)]
+
+delAllHNSCC <- HNSCC.Gene[,paste0(c(HPVNeg,HPVPos),'_CTX24h')] - 
+  HNSCC.Gene[,c(HPVNeg,HPVPos)]
+
+delAllHNSCC <- delAllHNSCC[setdiff(row.names(delAllHNSCC),'EGFR'),]
+
+mm <- model.matrix(~delEGFRHNSCC)
+delFit <- eBayes(lmFit(delAllHNSCC[,names(delEGFRHNSCC)],mm))
+
+AP2StatHNSCCUp <- geneSetTest(statistics = delFit$t[,2],
+                              index=intersect(AP2Up[,1],
+                                              row.names(delAllHNSCC)),
+                              alternative='greater')
+AP2StatHNSCCDown <- geneSetTest(statistics = delFit$t[,2],
+                                index=intersect(AP2Down[,1],
+                                                row.names(delAllHNSCC)),
+                                alternative='less')
 
 delPlot <- rbind(EGFR=delEGFRHNSCC,
                  delAllHNSCC[intersect(TF2Gene[['AP-2alpha']],
