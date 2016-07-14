@@ -4,7 +4,7 @@ load.project()
 
 ## load in fRMA normalized cetuximab treated data in HNSCC tumors: 
 ## http://www.ncbi.nlm.nih.gov/pmc/articles/PMC4741452/
-load('~/Dropbox/SchmitzCetuximab/HumanCtxSchmidtz_09May2016.Rda')
+load('HumanCtxSchmidtz_09May2016.Rda')
 
 ## Finding p16 expression as a surrogate for HPV status
 CDKN2AExprs <- matrix(NA, nrow=length(levels(pData(frmaData)$condition)),
