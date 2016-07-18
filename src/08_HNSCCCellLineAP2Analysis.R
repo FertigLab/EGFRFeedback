@@ -54,7 +54,7 @@ plot(CTX[row.names(delEGFR)],
      delEGFR[,'Cetuximab'], 
      col=ifelse(row.names(delEGFR) %in% HPVPos, 'blue','red'), 
      pch=ifelse(row.names(delEGFR) %in% HPVPos, 15,19),
-     ylim=c(-1,1),xlim=c(0,130),
+     ylim=c(-1,1),xlim=c(0,100),
      ylab='EGFR exprs in Trt - EGFR exprs in Control',
      xlab='Survival (%)')
 text(CTX[row.names(delEGFR)], 
@@ -69,7 +69,13 @@ abline(lm(as.numeric(delEGFR[HPVPos,'Cetuximab'])
           ~ as.numeric(CTX[HPVPos])),
        lty=2, lwd=2, col='blue')
 
-title(sprintf('HPV- %0.2f, HPV+ %0.2f',
+abline(lm(as.numeric(delEGFR[c(HPVNeg,HPVPos),'Cetuximab'])
+          ~ as.numeric(CTX[c(HPVNeg,HPVPos)])),
+       lty=2, lwd=2, col='black')
+
+title(sprintf('All %0.2f, HPV- %0.2f, HPV+ %0.2f',
+              cor.test(as.numeric(CTX[c(HPVNeg,HPVPos)]),as.numeric(delEGFR[c(HPVNeg,HPVPos),'Cetuximab']),
+                                 alternative='less')$p.value,
               cor.test(as.numeric(CTX[HPVNeg]),as.numeric(delEGFR[HPVNeg,'Cetuximab']),
                        alternative='less')$p.value,
               cor.test(as.numeric(CTX[HPVPos]),as.numeric(delEGFR[HPVPos,'Cetuximab']),
