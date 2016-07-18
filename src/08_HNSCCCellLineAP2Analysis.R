@@ -15,7 +15,7 @@ colnames(HNSCC.Gene) <- sapply(strsplit(colnames(HNSCC.Gene),split="_"),
 CTX.Names <- grep('CTX',colnames(HNSCC.Gene),value=T)
 CTX.Names <- CTX.Names[grep('1CC8',CTX.Names,invert=T)]
 
-CTX <- tapply(HNSCC.CellLines.sampleAnnot$Hiro.CTX,HNSCC.CellLines.sampleAnnot$CellLine,unique)
+CTX <- tapply(HNSCC.CellLines.sampleAnnot$CTX,HNSCC.CellLines.sampleAnnot$CellLine,unique)
 
 
 # HPV-positive and HPV-negative cells
