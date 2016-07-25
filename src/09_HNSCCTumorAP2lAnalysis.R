@@ -4,7 +4,7 @@ load.project()
 
 ## load in fRMA normalized cetuximab treated data in HNSCC tumors: 
 ## http://www.ncbi.nlm.nih.gov/pmc/articles/PMC4741452/
-load('HumanCtxSchmidtz_09May2016.Rda')
+load('~/Dropbox/SchmitzCetuximab/HumanCtxSchmidtz_09May2016.Rda')
 
 ## Finding p16 expression as a surrogate for HPV status
 CDKN2AExprs <- matrix(NA, nrow=length(levels(pData(frmaData)$condition)),
@@ -54,6 +54,14 @@ delExprs <- exprs(frmaData)[,trt] - exprs(frmaData)[,pretrt]
 colnames(delExprs) <- paste0('P',pData(frmaData)[pretrt,'Patient.number'])
 delExprs <- delExprs[geneProbeSelect,]
 row.names(delExprs) <- names(geneProbeSelect)
+
+## change in EGFR vs p16
+pdf('graphs/EGFRvP16Exprs.pdf')
+boxplot(delExprs['EGFR',HPVNeg],delExprs['EGFR',setdiff(colnames(delExprs),HPVNeg)], 
+        names=paste(c('<','>'),round(median(apply(CDKN2AExprs,2,mean)),1)), 
+        xlab=sprintf('p16 mRNA expression (%s)',geneProbeSelect['CDKN2A']),
+        ylab=sprintf('EGFR mRNA expression post - pre-treatment (%s)',geneProbeSelect['EGFR']))
+dev.off()
 
 ## load in AP-2alpha gene expression signature 
 AP2Up <- read.table('reports/LINCS2000/AP2Up.grp',header=T)[,1]
